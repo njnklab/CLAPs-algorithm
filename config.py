@@ -1,11 +1,13 @@
 import numpy as np
+from pathlib import Path
+ROOT = Path(__file__).resolve().parent
 
-TEMP_PATH = "./assets/temp"
-SYNTHETIC_NET_PATH = "./assets/net/synthetic"
-REAL_NET_PATH = "./assets/net/real"
-TEST_NET_PATH = "./assets/net/test"
-RESULT_PATH = "./assets/result/new"
-LOG_PATH = "./assets/log"
+TEMP_PATH = str(ROOT / "assets" / "temp")
+SYNTHETIC_NET_PATH = str(ROOT / "assets" / "net" / "synthetic")
+REAL_NET_PATH = str(ROOT / "assets" / "net" / "real")
+TEST_NET_PATH = str(ROOT / "assets" / "net" / "test")
+RESULT_PATH = str(ROOT / "assets" / "result" / "new")
+LOG_PATH = str(ROOT / "assets" / "log")
 
 # NETWORK_NODES_LIST: list[int] = [100, 1000, 10000]
 NETWORK_NODES_LIST: list[int] = [1000]

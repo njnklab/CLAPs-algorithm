@@ -966,7 +966,7 @@ class MultiMatching:
         m1, m2 = self.matchings
         V = list(set(m1.graph.nodes) | set(m2.graph.nodes))
         N = len(V)
-        if N > n_max:
+        if n_max > 0 and N > n_max:
             raise ValueError(f"Problem too large for ILP baseline: N={N} > n_max={n_max}.")
 
         # 预算来源（仅 fixed/at_most 使用；auto 会自动决定）
