@@ -398,5 +398,5 @@ export const bibtex = `@misc{zheng_optimized_duplex_control,
   author       = {Haoyu Zheng and Xizhe Zhang},
   note         = {Manuscript under revision},
   howpublished = {Matching-based structural controllability for aligned-node duplex networks},
-  url          = {https://github.com/njnklab/CLAP-S_Algorithm}
+  url          = {https://github.com/njnklab/CLAPs-algorithm}
 }`;

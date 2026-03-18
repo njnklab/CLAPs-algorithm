@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { BlockMath, InlineMath } from "react-katex";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/providers/i18n-provider";
@@ -22,13 +22,13 @@ export function SafeBlockMath({ math }: { math: string }) {
 }
 
 
-type FormatMathTextProps<T extends keyof JSX.IntrinsicElements = "span"> = {
+type FormatMathTextProps<T extends keyof React.JSX.IntrinsicElements = "span"> = {
   text?: string;
   children?: React.ReactNode;
   as?: T;
-} & Omit<React.ComponentPropsWithoutRef<T>, "children">;
+} & Omit<React.JSX.IntrinsicElements[T], "children">;
 
-export function FormatMathText<T extends keyof JSX.IntrinsicElements = "span">({
+export function FormatMathText<T extends keyof React.JSX.IntrinsicElements = "span">({
   text,
   children,
   as,
@@ -39,18 +39,18 @@ export function FormatMathText<T extends keyof JSX.IntrinsicElements = "span">({
 
   // Supports multi-line math blocks and treats \ as literal if passed via JSX children
   const parts = content.split(/(\$[\s\S]*?\$)/g);
-  const Component = (as || "span") as keyof JSX.IntrinsicElements;
+  const Component = (as || "span") as any;
   const InlineWrapper =
-    as === "tspan" || as === "text" ? ("tspan" as keyof JSX.IntrinsicElements) : ("span" as keyof JSX.IntrinsicElements);
+    as === "tspan" || as === "text" ? "tspan" : "span";
 
   return (
-    <Component suppressHydrationWarning {...rest}>
+    <Component suppressHydrationWarning {...(rest as any)}>
       {parts.map((part, index) => {
         if (!part) return null;
         if (part.startsWith("$") && part.endsWith("$")) {
           return <SafeInlineMath key={index} math={part.slice(1, -1)} />;
         }
-        const Wrapper = InlineWrapper;
+        const Wrapper = InlineWrapper as any;
         return <Wrapper key={index}>{part}</Wrapper>;
       })}
     </Component>

@@ -510,7 +510,7 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
                   <div className="mt-2 text-sm text-ink/65">{t("resources.links.paper.caption")}</div>
                 </Link>
                 <Link
-                  href="https://github.com/njnklab/CLAP-S_Algorithm"
+                  href="https://github.com/njnklab/CLAPs-algorithm"
                   className="rounded-[22px] border border-ink/10 bg-mist/55 p-5 transition hover:bg-mist"
                   target="_blank"
                   rel="noreferrer"
