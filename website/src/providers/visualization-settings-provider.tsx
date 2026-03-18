@@ -24,8 +24,8 @@ const DARK_STYLE_OVERRIDES: DeepPartial<NetworkStyleConfig> = {
       fillColorOpacity: 0.3
     },
     driver: {
-      strokeColor: "#f97316",
-      textColor: "#fdba74",
+      strokeColor: "#fb7185",
+      textColor: "#feb4b4ff",
       fillColor: "#422006",
       fillColorOpacity: 0.35
     },
@@ -48,10 +48,10 @@ const DARK_STYLE_OVERRIDES: DeepPartial<NetworkStyleConfig> = {
       color: "#94a3b8"
     },
     alternativeNonMatching: {
-      color: "#34d399"
+      color: "#7dd3fc"
     },
     alternativeMatching: {
-      color: "#a855f7"
+      color: "#fb7185"
     },
     virtual: {
       color: "rgba(255,255,255,0.12)"

@@ -464,7 +464,7 @@ export default function ExchangeTheorem() {
                 <div className="flex flex-wrap mb-4 gap-x-8 gap-y-4">
                   <KeyEdge color={matchingEdgeColor} label={t("exchange.legend.matched")} />
                   <KeyEdge color={nonMatchingEdgeColor} label={t("exchange.legend.unmatched")} />
-                  <KeyEdge color={alternatingEdgeColor} label={t("exchange.legend.alternating")} />
+                  <KeyEdge color={altMatchedEdgeColor} label={t("exchange.legend.alternating")} />
                 </div>
                 <div className="flex flex-wrap gap-x-8 gap-y-4">
                   <KeyNode color={driverNodeColor} label={t("exchange.legend.driver")} />

@@ -37,8 +37,9 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
     >
       <button type="button" className="absolute inset-0 h-full w-full cursor-default" onClick={onClose} aria-hidden />
 
-      <div className="relative z-[61] w-full max-w-md rounded-3xl border border-white/20 bg-paper/95 p-6 text-sm text-ink shadow-card dark:border-white/10 dark:bg-slate-900/95">
-        <div className="mb-6 flex items-center justify-between">
+      <div className="relative z-[61] flex w-full max-w-md max-h-[calc(100vh-3rem)] flex-col rounded-3xl border border-white/20 bg-paper/95 p-6 text-sm text-ink shadow-card dark:border-white/10 dark:bg-slate-900/95 transition-all">
+        {/* Header - Fixed */}
+        <div className="mb-6 flex items-center justify-between shrink-0">
           <div>
             <div className="text-xs uppercase tracking-[0.28em] text-layer1">{t("settings.eyebrow")}</div>
             <h3 className="mt-2 text-xl font-semibold text-ink">{t("settings.title")}</h3>
@@ -53,7 +54,8 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
           </button>
         </div>
 
-        <div className="space-y-6">
+        {/* Scrollable Content Area */}
+        <div className="space-y-6 overflow-y-auto pr-2 custom-scrollbar">
           <section>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-layer2">{t("settings.appearance")}</p>
             <div className="mt-3 grid grid-cols-3 gap-2">
@@ -269,7 +271,8 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
           </section>
         </div>
 
-        <div className="mt-6 flex items-center justify-between border-t border-ink/10 pt-4 dark:border-white/10">
+        {/* Footer - Fixed */}
+        <div className="mt-6 flex items-center justify-between border-t border-ink/10 pt-4 shrink-0 dark:border-white/10">
           <button
             type="button"
             onClick={reset}
