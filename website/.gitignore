@@ -1,0 +1,12 @@
+.next
+out
+node_modules
+npm-debug.log*
+dist
+coverage
+output
+*.tsbuildinfo
+*.zip
+.DS_Store
+CLAP-S_Algorithm-main
+Optimized_Control_of_Duplex_Networks (1)
