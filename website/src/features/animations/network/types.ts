@@ -107,6 +107,7 @@ export interface NetworkProps {
   titleFontSize?: number;
   renderEdges?: boolean;
   exchangePresentation?: ExchangePresentation;
+  stripedNodeIds?: number[];
 }
 
 export type EdgeTuple = [number, number];

@@ -47,27 +47,28 @@ export const primerMatchingOptions = {
 } as const;
 
 export type DuplexState = {
-  label: string;
+  id: string;
+  labelKey: string;
+  explanationKey: string;
   d1: number[];
   d2: number[];
   clap?: string;
-  explanation: string;
 };
 
 export const unionContractionStates: DuplexState[] = [
   {
-    label: "Initial",
+    id: "initial",
+    labelKey: "union.steps.initial.label",
+    explanationKey: "union.steps.initial.explanation",
     d1: [1, 2],
     d2: [4, 5],
-    explanation:
-      "Two minimum driver sets are valid independently, but they share no nodes. The union $|U|$ is 4 even though each layer needs only 2 drivers."
   },
   {
-    label: "Reconfigured",
+    id: "reconfigured",
+    labelKey: "union.steps.reconfigured.label",
+    explanationKey: "union.steps.reconfigured.explanation",
     d1: [3, 4],
     d2: [3, 4],
-    explanation:
-      "After matching reconfiguration, both layers still use budget 2, but they now overlap completely. The union $|U|$ contracts from 4 to 2."
   }
 ];
 

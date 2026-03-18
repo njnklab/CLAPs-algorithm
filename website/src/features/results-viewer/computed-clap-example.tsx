@@ -103,7 +103,7 @@ function Controls({
         type="button"
         onClick={onToggleAutoplay}
         data-testid="computed-play"
-        className="rounded-full bg-ink px-4 py-2 text-sm text-white transition hover:bg-ink/90"
+        className="rounded-full bg-ink px-4 py-2 text-sm text-white transition hover:bg-ink/90 dark:text-slate-900"
       >
         {autoplay ? "Pause" : "Play"}
       </button>
@@ -142,7 +142,7 @@ function LayerPanel({
   const duplexNodeBgOpacity = Math.round(APP_CONFIG.opacity.duplex_node_bg * 255).toString(16).padStart(2, '0');
 
   return (
-    <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-white to-mist/80 p-4">
+    <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-surface to-mist/80 p-4">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="text-sm font-medium text-ink">Layer {layer}</div>
         <div className="text-xs uppercase tracking-[0.18em] text-ink/50">
@@ -324,7 +324,7 @@ export function ComputedClapExample() {
             />
           </div>
 
-          <div className="mt-5 rounded-[24px] border border-ink/8 bg-white/80 p-4 text-sm leading-7 text-ink/72">
+          <div className="mt-5 rounded-[24px] border border-ink/8 bg-surface/80 p-4 text-sm leading-7 text-ink/72">
             The two layer-wise budgets stay fixed at <FormatMathText text="$k_1 = 3$" /> and{" "}
             <FormatMathText text="$k_2 = 3$" />. The animation shows only budget-preserving reconfiguration.
             The matching changes, the driver composition changes, and the union contracts from 6 to
@@ -379,7 +379,7 @@ export function ComputedClapExample() {
             <StatCard label="Frame type" value={frame.kind} hint={frame.title} />
           </div>
 
-          <div className="rounded-[24px] border border-ink/8 bg-white/90 p-5">
+          <div className="rounded-[24px] border border-ink/8 bg-surface/90 p-5">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
               Current frame
             </div>
@@ -392,7 +392,7 @@ export function ComputedClapExample() {
             ) : null}
           </div>
 
-          <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-white to-mist/70 p-5">
+          <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-surface to-mist/70 p-5">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
               Active CLAP segments
             </div>
@@ -405,7 +405,7 @@ export function ComputedClapExample() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-white to-mist/70 p-5">
+          <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-surface to-mist/70 p-5">
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
               Current sets
             </div>
@@ -441,7 +441,7 @@ export function ComputedClapExample() {
       <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <div />
         <div
-          className="rounded-[24px] border border-ink/8 bg-white/90 p-5"
+          className="rounded-[24px] border border-ink/8 bg-surface/90 p-5"
           data-testid="computed-export"
         >
           <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">

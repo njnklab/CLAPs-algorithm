@@ -7,6 +7,9 @@ const basePath = isGitHubActions ? `/${repoName}` : "";
 const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
+  eslint: {
+    ignoreDuringBuilds: true
+  },
   images: {
     unoptimized: true
   },

@@ -155,7 +155,7 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
           ))}
 
           <text x={width / 2} y={height - 2} textAnchor="middle" className="fill-ink/65 text-[12px]">
-            <FormatMathText text={String.raw`Average degree $\langle k \rangle$`} />
+            <FormatMathText as="tspan" text={String.raw`Average degree $\langle k \rangle$`} />
           </text>
         </svg>
         <div className="mt-5 flex flex-wrap gap-4 text-sm">
@@ -199,7 +199,7 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
             title="Animation E · Interactive results explorer"
             body="Switch between synthetic and real-world data, then inspect how solution quality, runtime, and memory change across network families."
           />
-          <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-white to-mist/70 p-5">
+          <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-surface to-mist/70 p-5">
             <div className="grid gap-4">
               <div>
                 <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
@@ -217,8 +217,8 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
                       className={cn(
                         "rounded-full px-4 py-2 text-sm transition",
                         dataset === value
-                          ? "bg-ink text-white"
-                          : "border border-ink/10 bg-white text-ink hover:bg-ink/5"
+                          ? "bg-ink text-white dark:text-slate-900"
+                          : "border border-ink/10 bg-surface text-ink hover:bg-ink/5"
                       )}
                     >
                       {label}
@@ -244,8 +244,8 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
                       className={cn(
                         "rounded-full px-4 py-2 text-sm transition",
                         metric === value
-                          ? "bg-ink text-white"
-                          : "border border-ink/10 bg-white text-ink hover:bg-ink/5"
+                          ? "bg-ink text-white dark:text-slate-900"
+                          : "border border-ink/10 bg-surface text-ink hover:bg-ink/5"
                       )}
                     >
                       {label}
@@ -267,8 +267,8 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
                         className={cn(
                           "rounded-full px-4 py-2 text-sm transition",
                           networkType === type
-                            ? "bg-ink text-white"
-                            : "border border-ink/10 bg-white text-ink hover:bg-ink/5"
+                            ? "bg-ink text-white dark:text-slate-900"
+                            : "border border-ink/10 bg-surface text-ink hover:bg-ink/5"
                         )}
                       >
                         {type}
@@ -290,8 +290,8 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
                         className={cn(
                           "rounded-full px-4 py-2 text-sm transition",
                           domain === item
-                            ? "bg-ink text-white"
-                            : "border border-ink/10 bg-white text-ink hover:bg-ink/5"
+                            ? "bg-ink text-white dark:text-slate-900"
+                            : "border border-ink/10 bg-surface text-ink hover:bg-ink/5"
                         )}
                       >
                         {item}
@@ -344,7 +344,7 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
           )}
         </div>
         <div className="space-y-5">
-          <div className="rounded-[24px] border border-ink/8 bg-white/92 p-5">
+          <div className="rounded-[24px] border border-ink/8 bg-surface/92 p-5">
             <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
               What this chart says
             </div>
@@ -368,14 +368,14 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
               </div>
             ) : (
               <div
-                className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-white to-mist/70 p-5"
+                className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-surface to-mist/70 p-5"
                 onMouseLeave={() => setHovered(null)}
               >
                 {syntheticChart}
               </div>
             )
           ) : (
-            <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-white to-mist/70 p-5">
+            <div className="rounded-[24px] border border-ink/8 bg-gradient-to-br from-surface to-mist/70 p-5">
               <div className="space-y-4">
                 {rankedReal.map((item) => {
                   const isLog = metric === "runtime" || metric === "memory";
@@ -464,7 +464,7 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
                               <div className="w-16 text-left text-xs uppercase tracking-[0.16em] text-ink/58">
                                 {key}
                               </div>
-                              <div className="h-3 flex-1 rounded-full bg-white">
+                              <div className="h-3 flex-1 rounded-full bg-surface">
                                 <div
                                   className="h-3 rounded-full"
                                   style={{
@@ -493,7 +493,7 @@ export function ResultsExplorer({ synthetic, real }: ResultsExplorerProps) {
               </div>
             </div>
           )}
-          <div className="rounded-[24px] border border-ink/8 bg-white/90 p-5 text-sm leading-7 text-ink/72">
+          <div className="rounded-[24px] border border-ink/8 bg-surface/90 p-5 text-sm leading-7 text-ink/72">
             <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
               Hover summary
             </div>

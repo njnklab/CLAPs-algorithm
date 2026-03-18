@@ -118,7 +118,7 @@ export const sectionCopy: SectionCopy[] = [
     paragraphs: [
       String.raw`本文将节点划分为四个集合：$CDS$, $CMS$, $DD_1$, 和 $DD_2$。差值节点是跨层冗余存在的地方。中继节点必须在 $CMS$ 和 $CDS$ 之间交替，以便路径传输失配感而不产生新的冲突。`,
       String.raw`CLAP 增益定理表明，应用有效的 CLAP 可保持 $k_1$ 和 $k_2$ 不变，使 $\Delta$ 减少 2，从而并集 $|U|$ 减少 1。这使得每次成功的路径查找都成为目标函数的精确下降步骤。`,
-      "“CLAP-or-Optimal”定理起到了全局最优证明的作用。一个配置在可行空间内是全局最优的，当且仅当它是 CLAP 稳定的（即不存在可行的 CLAP）。"
+      "“CLAP-or-Optimal” 定理说明：当不存在可行的 CLAP 时，系统就已经处于固定预算下的全局最优；反之，只要仍能找到 CLAP，就必然还能改进。"
     ]
   },
   {
@@ -229,7 +229,7 @@ export const theoryModules: TheoryModule[] = [
   },
   {
     id: "clap-optimal",
-    title: "CLAP-or-Optimal 定理",
+    title: "CLAP-or-Optimal 定理：不存在 CLAP 时即达到最优",
     intuition: [
       String.raw`如果存在更好的固定预算配置，那么当前匹配与更优匹配之间的差值必包含一个从 $DD_1$ 到 $DD_2$ 的路径状结构。`,
       "而该结构正是论文中所定义的 CLAP。"
@@ -385,7 +385,7 @@ export const glossaryItems: GlossaryItem[] = [
       "不存在可行 CLAP 的状态。在本文的可行空间内，这意味着并集不可能再进一步收缩。"
   },
   {
-    term: "CLAP-or-Optimal",
+    term: "CLAP-or-Optimal（不存在 CLAP 时即达到最优）",
     meaning:
       "指出可行配置当且仅当具有 CLAP 稳定性时才在全局最优的定理。"
   }

@@ -1,24 +1,26 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
-        ink: "#16212b",
-        mist: "#eef3f5",
-        paper: "#fbf9f3",
-        layer1: "#f97316", // 橙色
-        layer2: "#ec4899", // 粉色
-        matched: "#1f2937",
-        driver: "#f97316",
-        dd1: "#60a5fa",
-        dd2: "#60a5fa",
-        cds: "#f87171",
-        cms: "#f87171",
-        source: "#3b82f6",
-        relay: "#facc15",
-        target: "#60a5fa"
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
+        mist: "rgb(var(--color-mist) / <alpha-value>)",
+        paper: "rgb(var(--color-paper) / <alpha-value>)",
+        surface: "rgb(var(--color-surface) / <alpha-value>)",
+        layer1: "rgb(var(--color-layer1) / <alpha-value>)",
+        layer2: "rgb(var(--color-layer2) / <alpha-value>)",
+        matched: "rgb(var(--color-matched) / <alpha-value>)",
+        driver: "rgb(var(--color-driver) / <alpha-value>)",
+        dd1: "rgb(var(--color-dd1) / <alpha-value>)",
+        dd2: "rgb(var(--color-dd2) / <alpha-value>)",
+        cds: "rgb(var(--color-cds) / <alpha-value>)",
+        cms: "rgb(var(--color-cms) / <alpha-value>)",
+        source: "rgb(var(--color-source) / <alpha-value>)",
+        relay: "rgb(var(--color-relay) / <alpha-value>)",
+        target: "rgb(var(--color-target) / <alpha-value>)"
       },
       boxShadow: {
         card: "0 30px 80px -40px rgba(22, 33, 43, 0.25)"

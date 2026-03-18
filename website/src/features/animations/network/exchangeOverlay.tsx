@@ -87,7 +87,7 @@ export function ExchangeOverlay({
 
                 const markerEnd = directed
                     ? isMatched
-                        ? "url(#arrowhead-matched)"
+                        ? "url(#arrowhead-alt-matched)"
                         : "url(#arrowhead-alternating)"
                     : undefined;
 
