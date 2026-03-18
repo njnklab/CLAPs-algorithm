@@ -218,10 +218,10 @@ export const theoryModules: TheoryModule[] = [
   },
   {
     id: "objective-equivalence",
-    title: "Why minimizing $|U|$ is the same as minimizing $\Delta$",
+    title: String.raw`Why minimizing $|U|$ is the same as minimizing $\Delta$`,
     intuition: [
       "Under fixed budgets, the total amount of driver mass across both layers is fixed. The only thing that can change is how much of that mass is shared versus split across different nodes.",
-      "Difference mass $\Delta$ counts exactly the driver nodes that are unique to one layer. Reduce those disagreements, and the union shrinks automatically."
+      String.raw`Difference mass $\Delta$ counts exactly the driver nodes that are unique to one layer. Reduce those disagreements, and the union shrinks automatically.`
     ],
     formal: [
       String.raw`Let $DD_1 = D_1 \setminus D_2$ and $DD_2 = D_2 \setminus D_1$, and define $\Delta = |DD_1| + |DD_2|$.`,

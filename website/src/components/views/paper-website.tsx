@@ -312,7 +312,9 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
                 </div>
                 <div className="mt-4 grid gap-4 md:grid-cols-2">
                   <div className="rounded-[22px] border border-ink/8 bg-mist/70 p-5">
-                    <div className="text-lg font-semibold text-ink">{t("problem.proof.card1.title")}</div>
+                    <div className="text-lg font-semibold text-ink">
+                      <FormatMathText text={t("problem.proof.card1.title")} />
+                    </div>
                     <p className="mt-3 text-sm leading-7 text-ink/72">
                       <FormatMathText text={t("problem.proof.card1.body")} />
                     </p>
@@ -367,7 +369,7 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
                 <FadeIn key={module.id} delay={0.04 * index}>
                   <Card className="h-full">
                     <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
-                      {module.title}
+                      <FormatMathText text={module.title} />
                     </div>
                     <div className="mt-4 grid gap-5">
                       <div>

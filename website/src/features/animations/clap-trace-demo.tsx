@@ -8,6 +8,7 @@ import { Card, FormatMathText, KeyNode, StatCard, Stepper, SurfaceTitle } from "
 import { BipartiteNetwork } from "./network/bipartiteNetwork";
 import { DirectedNetwork } from "./network/directedNetwork";
 import type { NetworkNode } from "./network/types";
+import { useI18n } from "@/providers/i18n-provider";
 
 type ClapPhase =
   | { type: "search"; layer: 1 | 2; from: number; to: number; isTerminal: boolean }
@@ -101,6 +102,8 @@ export function ClapTraceDemo() {
   const phaseLabel = describePhase(currentPhase, effectivePhaseIndex, phaseCount);
   const unionSize = new Set([...step.d1, ...step.d2]).size;
   const deltaChange = stepIndex === 0 ? null : traceSteps[stepIndex - 1].delta - step.delta;
+
+  const { t } = useI18n();
 
   const networkNodes = useMemo<NetworkNode[]>(() => {
     const sorted = [...toyNodePositions].sort((a, b) => a.id - b.id);
@@ -207,7 +210,7 @@ export function ClapTraceDemo() {
       <div className="grid gap-8 lg:grid-cols-[1.3fr_0.8fr]">
         <div className="space-y-6">
           <SurfaceTitle
-            title="Animation D · CLAP execution trace on the paper's toy duplex"
+            title={t("clap.title")}
             body="Watch each CLAP unfold as alternating segments hop between the two layers, then observe how $DD_1$, $DD_2$, $CDS$, and $CMS$ adjust."
           />
           <div className="flex flex-wrap items-center gap-3 border border-ink/10 rounded-[24px] p-4 bg-surface/95">
@@ -215,9 +218,8 @@ export function ClapTraceDemo() {
               type="button"
               onClick={toggleDetailedPause}
               aria-pressed={detailedPause}
-              className={`rounded-full border px-4 py-2 text-sm transition ${
-                detailedPause ? "border-layer1 text-layer1 bg-layer1/15" : "border-ink/15 text-ink hover:border-ink/35"
-              }`}
+              className={`rounded-full border px-4 py-2 text-sm transition ${detailedPause ? "border-layer1 text-layer1 bg-layer1/15" : "border-ink/15 text-ink hover:border-ink/35"
+                }`}
             >
               {detailedPause ? "Detailed: on" : "Detailed: off"}
             </button>

@@ -183,14 +183,14 @@ export const theoryModules: TheoryModule[] = [
   },
   {
     id: "objective-equivalence",
-    title: "为什么最小化并集 $|U|$ 等同于最小化差异质量 $\Delta$",
+    title: String.raw`为什么最小化并集 $|U|$ 等同于最小化差异质量 $\Delta$`,
     intuition: [
       "在固定预算下，两层的驱动器总质量是固定的。唯一能改变的是多少质量是共享的，多少是分散在不同节点上的。",
-      "差异质量 $\Delta$ 精确计算了单层特有的驱动节点。减少这些失配，并集规模就会自动收缩。"
+      String.raw`差异质量 $\Delta$ 精确计算了单层特有的驱动节点。减少这些失配，并集规模就会自动收缩。`
     ],
     formal: [
-      "设 $DD_1 = D_1 \setminus D_2$ 且 $DD_2 = D_2 \setminus D_1$，定义 $\Delta = |DD_1| + |DD_2|$。",
-      "则 $|U| = (k_1 + k_2 + \Delta) / 2$。"
+      String.raw`设 $DD_1 = D_1 \setminus D_2$ 且 $DD_2 = D_2 \setminus D_1$，定义 $\Delta = |DD_1| + |DD_2|$。`,
+      String.raw`则 $|U| = (k_1 + k_2 + \Delta) / 2$。`
     ],
     why:
       "这将执行器复用的工程目标转化为对失配质量的图重构目标。",
