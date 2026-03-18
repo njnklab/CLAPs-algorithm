@@ -2,8 +2,24 @@
 
 import { motion } from "framer-motion";
 import { BlockMath, InlineMath } from "react-katex";
+import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
+
+export function SafeInlineMath({ math }: { math: string }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return <span suppressHydrationWarning className="opacity-0">{`$${math}$`}</span>;
+  return <InlineMath math={math} />;
+}
+
+export function SafeBlockMath({ math }: { math: string }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return <div suppressHydrationWarning className="py-4 text-center opacity-0">{`\\[${math}\\]`}</div>;
+  return <BlockMath math={math} />;
+}
+
 
 export function FormatMathText({ text, children }: { text?: string; children?: React.ReactNode }) {
   const content = text || (typeof children === "string" ? children : "");
@@ -13,17 +29,19 @@ export function FormatMathText({ text, children }: { text?: string; children?: R
   const parts = content.split(/(\$[\s\S]*?\$)/g);
   
   return (
-    <>
+    <span suppressHydrationWarning>
       {parts.map((part, index) => {
         if (!part) return null;
         if (part.startsWith("$") && part.endsWith("$")) {
-          return <InlineMath key={index} math={part.slice(1, -1)} />;
+          return <SafeInlineMath key={index} math={part.slice(1, -1)} />;
         }
         return <span key={index}>{part}</span>;
       })}
-    </>
+    </span>
   );
 }
+
+
 
 export function Card({
   className,
@@ -105,7 +123,7 @@ export function EquationCard({
         <FormatMathText text={title} />
       </div>
       <div className="mt-5 overflow-x-auto rounded-2xl bg-mist/80 px-3 py-2 text-ink">
-        <BlockMath math={formula} />
+        <SafeBlockMath math={formula} />
       </div>
       <p className="mt-4 text-sm leading-7 text-ink/75">
         <FormatMathText text={body} />
@@ -117,7 +135,7 @@ export function EquationCard({
 export function FormulaPill({ math }: { math: string }) {
   return (
     <span className="inline-flex items-center rounded-full border border-ink/10 bg-white px-4 py-2 text-sm text-ink shadow-sm">
-      <InlineMath math={math} />
+      <SafeInlineMath math={math} />
     </span>
   );
 }

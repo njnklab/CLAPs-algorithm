@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { BlockMath, InlineMath } from "react-katex";
 
 import { ClapTraceDemo } from "@/features/animations/clap-trace-demo";
 import { ComputedClapExample } from "@/features/results-viewer/computed-clap-example";
@@ -27,7 +26,7 @@ import {
 import type { RealSummary, SyntheticSummary } from "@/lib/results";
 import { formatNumber } from "@/lib/utils";
 
-import { Card, EquationCard, FadeIn, FormulaPill, StatCard, FormatMathText } from "@/components/ui/core";
+import { Card, EquationCard, FadeIn, FormulaPill, StatCard, FormatMathText, SafeInlineMath } from "@/components/ui/core";
 
 type PaperWebsiteProps = {
   synthetic: SyntheticSummary[];
@@ -66,7 +65,7 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
   }, [highlights, synthetic]);
 
   return (
-    <div className="relative min-h-screen bg-mesh text-ink">
+    <div className="relative min-h-screen bg-inherit text-ink">
       <div className="absolute inset-x-0 top-0 -z-10 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(11,114,133,0.2),transparent_42%)]" />
       <header className="sticky top-0 z-50 border-b border-white/70 bg-paper/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10">
@@ -329,11 +328,11 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
                 </div>
                 <div className="mt-4 grid gap-4 md:grid-cols-2">
                   <div className="rounded-[22px] border border-ink/8 bg-mist/70 p-5">
-                    <div className="text-lg font-semibold text-ink">Why minimizing <InlineMath math="|U|" /> equals minimizing <InlineMath math="\Delta" /></div>
+                    <div className="text-lg font-semibold text-ink">Why minimizing <SafeInlineMath math="|U|" /> equals minimizing <SafeInlineMath math="\Delta" /></div>
                     <p className="mt-3 text-sm leading-7 text-ink/72">
-                      The sum <InlineMath math={"|D_1| + |D_2| = k_1 + k_2"} /> is fixed. The only
+                      The sum <SafeInlineMath math={"|D_1| + |D_2| = k_1 + k_2"} /> is fixed. The only
                       movable quantity is how much of that driver mass sits in overlap versus in
-                      disagreement. <InlineMath math="\Delta" /> measures disagreement exactly, so once budgets are fixed it
+                      disagreement. <SafeInlineMath math="\Delta" /> measures disagreement exactly, so once budgets are fixed it
                       fully controls the union size.
                     </p>
                   </div>
@@ -341,7 +340,7 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
                     <div className="text-lg font-semibold text-ink">Why no CLAP means no more improvement</div>
                     <p className="mt-3 text-sm leading-7 text-ink/72">
                       Any better state would need a path-like structure that carries disagreement from
-                      a node in <InlineMath math="DD_1" /> to a node in <InlineMath math="DD_2" /> while preserving the budgets. The paper proves
+                      a node in <SafeInlineMath math="DD_1" /> to a node in <SafeInlineMath math="DD_2" /> while preserving the budgets. The paper proves
                       that such a structure is exactly a CLAP. So if no CLAP exists, there is no
                       budget-preserving improvement left to take.
                     </p>
