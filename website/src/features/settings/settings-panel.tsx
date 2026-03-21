@@ -41,7 +41,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
         {/* Header - Fixed */}
         <div className="mb-6 flex items-center justify-between shrink-0">
           <div>
-            <div className="text-xs uppercase tracking-[0.28em] text-layer1">{t("settings.eyebrow")}</div>
+            <div className="text-xs uppercase tracking-[0.28em] text-accent">{t("settings.eyebrow")}</div>
             <h3 className="mt-2 text-xl font-semibold text-ink">{t("settings.title")}</h3>
           </div>
           <button
@@ -57,7 +57,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
         {/* Scrollable Content Area */}
         <div className="space-y-6 overflow-y-auto pr-2 custom-scrollbar">
           <section>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-layer2">{t("settings.appearance")}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-accent-secondary">{t("settings.appearance")}</p>
             <div className="mt-3 grid grid-cols-3 gap-2">
               {(["system", "light", "dark"] as const).map((mode) => (
                 <button
@@ -78,7 +78,28 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
           </section>
 
           <section>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-layer2">{t("settings.nodes")}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-accent-secondary">{t("settings.layout")}</p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {(["horizontal", "vertical"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setValue("layout.orientation", mode)}
+                  className={cn(
+                    "rounded-2xl border px-3 py-2 text-xs font-medium transition",
+                    styleConfig.layout.orientation === mode
+                      ? "border-ink bg-ink text-white dark:border-white dark:bg-surface dark:text-white"
+                      : "border-ink/15 text-ink/80 hover:border-ink/40 dark:border-white/10 dark:text-white/70 dark:hover:text-white"
+                  )}
+                >
+                  {t(`settings.orientation.${mode}`)}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-accent-secondary">{t("settings.nodes")}</p>
             <div className="mt-4 space-y-4">
               <label className="block">
                 <span className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/60">{t("settings.nodeRadius")}</span>
@@ -167,7 +188,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
           </section>
 
           <section>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-layer2">{t("settings.edges")}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-accent-secondary">{t("settings.edges")}</p>
             <div className="mt-4 space-y-4">
               <label className="block">
                 <span className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/60">{t("settings.edgeWidth")}</span>
@@ -241,7 +262,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
           </section>
 
           <section>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-layer2">{t("settings.hover")}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-accent-secondary">{t("settings.hover")}</p>
             <div className="mt-4 space-y-4">
               <label className="block">
                 <span className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/60">{t("settings.nodeHoverScale")}</span>

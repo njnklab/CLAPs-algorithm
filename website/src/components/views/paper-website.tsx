@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 
 import { SiteNavbar } from "@/components/layout/site-navbar";
 import { ClapTraceDemo } from "@/features/animations/clap-trace-demo";
-import { ComputedClapExample } from "@/features/results-viewer/computed-clap-example";
 import { ResultsExplorer } from "@/features/results-viewer/results-explorer";
 import { SectionShell } from "@/components/ui/section-shell";
 import { StructuralPrimer } from "@/features/animations/structural-primer";
@@ -89,7 +88,7 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
                 className="max-w-3xl"
               >
                 <div className="inline-flex items-center gap-3 rounded-full border border-white/85 bg-surface/85 px-4 py-2 text-sm text-ink/72 shadow-sm">
-                  <span className="font-semibold text-layer1">{hero.tone}</span>
+                  <span className="font-semibold text-accent">{hero.tone}</span>
                   <span>{t("hero.badge")}</span>
                 </div>
                 <h1 className="mt-6 max-w-4xl text-balance font-serif text-5xl leading-[1.02] text-ink sm:text-6xl">
@@ -346,7 +345,6 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
           </div>
           <div className="mt-8 space-y-8">
             <ClapTraceDemo />
-            <ComputedClapExample />
           </div>
         </SectionShell>
 
@@ -368,7 +366,7 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
               {theoryModules.map((module, index) => (
                 <FadeIn key={module.id} delay={0.04 * index}>
                   <Card className="h-full">
-                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
+                    <div className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-accent">
                       <FormatMathText text={module.title} />
                     </div>
                     <div className="mt-4 grid gap-5">
@@ -428,39 +426,41 @@ export function PaperWebsite({ synthetic, real, highlights }: PaperWebsiteProps)
           title={applicationsCopy.title}
           lead={applicationsCopy.lead}
         >
-          <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-            <div className="space-y-4 text-base leading-8 text-ink/75">
-              {applicationsCopy.paragraphs.map((paragraph) => (
-                <p key={paragraph}><FormatMathText text={paragraph} /></p>
-              ))}
-              <div className="grid gap-4">
-                {applications.map((item) => (
-                  <Card key={item.title} className="bg-surface/90">
-                    <div className="text-lg font-semibold text-ink"><FormatMathText text={item.title} /></div>
-                    <p className="mt-3 text-sm leading-7 text-ink/72"><FormatMathText text={item.body} /></p>
-                  </Card>
+          <div className="space-y-8">
+            <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr]">
+              <div className="space-y-4 text-base leading-8 text-ink/75">
+                {applicationsCopy.paragraphs.map((paragraph) => (
+                  <p key={paragraph}><FormatMathText text={paragraph} /></p>
                 ))}
               </div>
+              <Card className="bg-[radial-gradient(circle_at_top_right,rgba(11,114,133,0.14),rgba(var(--color-surface),0.92))]">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
+                  {t("applications.distinguish.title")}
+                </div>
+                <div className="mt-4 space-y-5 text-sm leading-7 text-ink/73">
+                  <p>
+                    <span className="font-semibold text-ink">{t("applications.distinguish.paper.title")}</span>{" "}
+                    {t("applications.distinguish.paper.body")}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-ink">{t("applications.distinguish.experiments.title")}</span>{" "}
+                    {t("applications.distinguish.experiments.body")}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-ink">{t("applications.distinguish.future.title")}</span>{" "}
+                    {t("applications.distinguish.future.body")}
+                  </p>
+                </div>
+              </Card>
             </div>
-            <Card className="h-full bg-[radial-gradient(circle_at_top_right,rgba(11,114,133,0.14),rgba(var(--color-surface),0.92))]">
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
-                {t("applications.distinguish.title")}
-              </div>
-              <div className="mt-4 space-y-5 text-sm leading-7 text-ink/73">
-                <p>
-                  <span className="font-semibold text-ink">{t("applications.distinguish.paper.title")}</span>{" "}
-                  {t("applications.distinguish.paper.body")}
-                </p>
-                <p>
-                  <span className="font-semibold text-ink">{t("applications.distinguish.experiments.title")}</span>{" "}
-                  {t("applications.distinguish.experiments.body")}
-                </p>
-                <p>
-                  <span className="font-semibold text-ink">{t("applications.distinguish.future.title")}</span>{" "}
-                  {t("applications.distinguish.future.body")}
-                </p>
-              </div>
-            </Card>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {applications.map((item) => (
+                <Card key={item.title} className="bg-surface/90 border-ink/5 p-5 transition-all hover:bg-mist/40 cursor-default">
+                  <div className="text-base font-semibold text-ink leading-tight"><FormatMathText text={item.title} /></div>
+                  <p className="mt-2.5 text-sm leading-6 text-ink/70 text-pretty"><FormatMathText text={item.body} /></p>
+                </Card>
+              ))}
+            </div>
           </div>
         </SectionShell>
 

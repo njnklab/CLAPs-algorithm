@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { APP_CONFIG, hexToRgb } from "@/lib/config";
 
 export type ThemeMode = "light" | "dark";
 export type ThemePreference = ThemeMode | "system";
@@ -64,9 +65,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
+    
+    // Toggle dark class
     root.classList.toggle("dark", theme === "dark");
     root.dataset.theme = theme;
     root.style.setProperty("color-scheme", theme);
+
+    // Inject semantic colors as RGB triplets for Tailwind
+    const colors = APP_CONFIG.colors[theme];
+    Object.entries(colors).forEach(([key, value]) => {
+      if (typeof value === "string" && value.startsWith("#")) {
+        root.style.setProperty(`--color-${key}`, hexToRgb(value));
+      }
+    });
+
+    // Inject other visual properties
+    const visual = APP_CONFIG.visual;
+    root.style.setProperty("--mesh-bg", visual.gradients.mesh[theme]);
+    root.style.setProperty("--body-bg", visual.gradients.body[theme]);
+    root.style.setProperty("--card-shadow", visual.shadows.card);
+
   }, [theme]);
 
   const setPreference = useCallback((value: ThemePreference) => {

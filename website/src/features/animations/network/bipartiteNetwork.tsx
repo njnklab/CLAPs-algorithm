@@ -6,6 +6,7 @@ import { primerEdges, primerMatchingOptions } from "../data/demoData";
 import { NetworkProps, DEFAULT_STYLE_CONFIG, EdgeTuple, LineGeometry } from "./types";
 import { ExchangeOverlay, buildPreviewStyleMap, buildStep2ExchangeTokens } from "./exchangeOverlay";
 import { useI18n } from "@/providers/i18n-provider";
+import { APP_CONFIG } from "@/lib/config";
 
 function edgeEq(a: EdgeTuple, b: EdgeTuple) {
   return a[0] === b[0] && a[1] === b[1];
@@ -69,7 +70,7 @@ export function BipartiteNetwork({
   const { strokeWidth: edgeStrokeWidth } = styleConfig.edges.all;
 
   const edgesToRender = customEdges || primerEdges;
-  const isHorizontal = layout === "horizontal";
+  const isHorizontal = layout === "horizontal"; // We want this to mean Side-by-Side (Left-Right)
 
   const currentMatching = customMatching || (matchingCase ? primerMatchingOptions[matchingCase].edges : []);
   const drivers = customDrivers || (matchingCase ? primerMatchingOptions[matchingCase].drivers : []);
@@ -130,7 +131,7 @@ export function BipartiteNetwork({
   };
 
   const sourceNodes = nodes.map((node) => {
-    const isMatched = (stage >= 3 || forceShowMatching) && nodeMatching.some(([_, to]) => to === node.id);
+    const isMatched = (stage >= 3 || forceShowMatching) && nodeMatching.some(([from, _]) => from === node.id);
     const isDriver = (stage >= 3 || forceShowMatching) && (nodeDrivers as readonly number[]).includes(node.id);
     const isSourceHovered = hoveredNode?.id === node.id && (hoveredNode.side === "source" || hoveredNode.side === "both");
 
@@ -252,7 +253,7 @@ export function BipartiteNetwork({
       if (styleConfig.nodes.hover.scale !== "no-change") currentRadius *= styleConfig.nodes.hover.scale;
     }
 
-    const stripePatternId = stripedNodeSet.has(node.id) ? `stripe-node-${node.id}-target` : null;
+    const stripePatternId = stripedNodeSet.has(node.id) ? `stripe-node-${title?.replace(/\s+/g, '-')}-${node.id}-target` : null;
     if (stripePatternId) {
       registerStripePattern(stripePatternId, strokeColor, 0.45);
     }
@@ -326,7 +327,7 @@ export function BipartiteNetwork({
       {title && (
         <text
           x={50}
-          y={2}
+          y={6}
           fill="currentColor"
           textAnchor="middle"
           dominantBaseline="hanging"
@@ -369,7 +370,7 @@ export function BipartiteNetwork({
         <g className="bipartite-labels">
           {isHorizontal ? (
             <>
-              <foreignObject x="0" y={20 - nodeRadius} width="100" height="5">
+              <foreignObject x="0" y={APP_CONFIG.visual.network.layout.y_source - nodeRadius - APP_CONFIG.visual.network.layout.label_offset_source_horizontal} width="100" height="6">
                 <div
                   className="text-ink/75 font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-1"
                   style={{ fontSize: `${textFontSize * 0.7}px` }}
@@ -377,7 +378,7 @@ export function BipartiteNetwork({
                   {t("network.labels.sourceCopies")}
                 </div>
               </foreignObject>
-              <foreignObject x="0" y={75 + nodeRadius} width="100" height="5">
+              <foreignObject x="0" y={APP_CONFIG.visual.network.layout.y_target + nodeRadius + APP_CONFIG.visual.network.layout.label_offset_target_horizontal} width="100" height="6">
                 <div
                   className="text-ink/75 font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-1"
                   style={{ fontSize: `${textFontSize * 0.7}px` }}
@@ -388,17 +389,17 @@ export function BipartiteNetwork({
             </>
           ) : (
             <>
-              <foreignObject x="4" y="5" width="40" height="5">
+              <foreignObject x={APP_CONFIG.visual.network.layout.x_source - nodeRadius - APP_CONFIG.visual.network.layout.label_offset_source_vertical} y="0" width="8" height="100">
                 <div
-                  className="text-ink/75 font-bold uppercase tracking-[0.2em] flex items-center gap-1"
+                  className="h-full text-ink/75 font-bold uppercase tracking-[0.2em] flex items-center justify-center [writing-mode:vertical-rl]"
                   style={{ fontSize: `${textFontSize * 0.7}px` }}
                 >
                   {t("network.labels.sourceCopies")}
                 </div>
               </foreignObject>
-              <foreignObject x="63" y="5" width="40" height="5">
+              <foreignObject x={APP_CONFIG.visual.network.layout.x_target + nodeRadius - APP_CONFIG.visual.network.layout.label_offset_target_vertical} y="0" width="8" height="100">
                 <div
-                  className="text-ink/75 font-bold uppercase tracking-[0.2em] flex items-center gap-1"
+                  className="h-full text-ink/75 font-bold uppercase tracking-[0.2em] flex items-center justify-center [writing-mode:vertical-rl]"
                   style={{ fontSize: `${textFontSize * 0.7}px` }}
                 >
                   {t("network.labels.targetCopies")}
@@ -461,12 +462,12 @@ export function BipartiteNetwork({
 
         // Base styles
         if (pathKind === "matched") {
-          const style = styleConfig.edges.alternativeNonMatching;
+          const style = styleConfig.edges.alternativeMatching;
           strokeColor = style.color;
           strokeDasharray = style.dashed ? style.dashArray : "none";
           opacity = style.colorOpacity;
         } else if (pathKind === "alternating") {
-          const style = styleConfig.edges.alternativeMatching;
+          const style = styleConfig.edges.alternativeNonMatching;
           strokeColor = style.color;
           strokeDasharray = style.dashed ? style.dashArray : "none";
           opacity = style.colorOpacity;
@@ -474,11 +475,6 @@ export function BipartiteNetwork({
           strokeColor = styleConfig.edges.matching.color;
           strokeDasharray = styleConfig.edges.matching.dashed ? styleConfig.edges.matching.dashArray : "none";
           opacity = styleConfig.edges.matching.colorOpacity;
-        } else if (isHighlighted || previewKind === "alternating") {
-          // Fallback for safety, though pathKind covers these
-          strokeColor = styleConfig.edges.alternativeMatching.color;
-          strokeDasharray = styleConfig.edges.alternativeMatching.dashed ? styleConfig.edges.alternativeMatching.dashArray : "none";
-          opacity = styleConfig.edges.alternativeMatching.colorOpacity;
         } else {
           strokeColor = styleConfig.edges.nonMatching.color;
           strokeDasharray = styleConfig.edges.nonMatching.dashed ? styleConfig.edges.nonMatching.dashArray : "none";

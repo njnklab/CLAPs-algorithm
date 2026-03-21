@@ -31,8 +31,8 @@ export const heroOptions: HeroOption[] = [
       "双构网络可以通过跨层重新配置，在保持两层最小驱动预算不变的情况下，降低整体驱动成本。",
     value:
       String.raw`每次成功的 CLAP 更新都会消除两个跨层冲突，并将驱动节点并集收缩正好一个节点。`,
-    primaryCta: "观看演示",
-    secondaryCta: "下载 PDF"
+    primaryCta: "下载 PDF",
+    secondaryCta: "观看演示"
   }
 ];
 
@@ -47,6 +47,16 @@ export const navItems = [
   { id: "results", label: "实验结果" },
   { id: "resources", label: "资源下载" }
 ];
+
+export const settings = {
+  nodeHoverScale: "Node Hover Scale",
+  edgeHoverScale: "Edge Hover Scale",
+  layout: "Layout",
+  orientation: "Bipartite Orientation",
+  horizontal: "Horizontal",
+  vertical: "Vertical",
+  reset: "Reset",
+};
 
 export const sectionCopy: SectionCopy[] = [
   {

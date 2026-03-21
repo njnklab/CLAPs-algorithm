@@ -14,15 +14,15 @@ type ExampleFrame = ExampleData["frames"][number];
 type ExampleSegment = ExampleFrame["activeSegments"][number];
 
 const partitionPalette = {
-  dd1: APP_CONFIG.colors.duplex.dd1,
-  dd2: APP_CONFIG.colors.duplex.dd2,
-  cds: APP_CONFIG.colors.duplex.cds,
-  cms: APP_CONFIG.colors.duplex.cms
+  dd1: APP_CONFIG.colors.light.layer1,
+  dd2: APP_CONFIG.colors.light.layer2,
+  cds: APP_CONFIG.colors.light.cds,
+  cms: APP_CONFIG.colors.light.cms
 } as const;
 
 const layerStroke = {
-  1: APP_CONFIG.colors.layer1.matching_edge,
-  2: APP_CONFIG.colors.layer2.matching_edge
+  1: APP_CONFIG.colors.light.layer1,
+  2: APP_CONFIG.colors.light.layer2
 } as const;
 
 function asNumberList(values: readonly unknown[]) {
@@ -175,7 +175,7 @@ function LayerPanel({
               y1={a.y}
               x2={b.x}
               y2={b.y}
-              stroke={APP_CONFIG.colors.single_layer.non_matching_edge}
+              stroke={APP_CONFIG.colors.light.non_matching_edge}
               strokeWidth={1.1}
               strokeLinecap="round"
               opacity={0.8}
@@ -234,7 +234,7 @@ function LayerPanel({
                   cy={node.y}
                   r={6.1}
                   fill="none"
-                  stroke={APP_CONFIG.colors.duplex.active_clap}
+                  stroke={APP_CONFIG.colors.light.hover}
                   strokeWidth={1.8}
                   opacity={0.85}
                 />
@@ -244,7 +244,7 @@ function LayerPanel({
                 cy={node.y}
                 r={isDriver ? 4.8 : 4.1}
                 fill={`${color}${duplexNodeBgOpacity}`}
-                stroke={isActive ? APP_CONFIG.colors.duplex.active_clap : color}
+                stroke={isActive ? APP_CONFIG.colors.light.hover : color}
                 strokeWidth={isActive ? 1.9 : 1.4}
               />
               {isDriver ? (
@@ -341,7 +341,7 @@ export function ComputedClapExample() {
             <KeyNode color={partitionPalette.dd2} label="$DD_2$" />
             <KeyNode color={partitionPalette.cds} label="$CDS$" />
             <KeyNode color={partitionPalette.cms} label="$CMS$" />
-            <KeyNode color={APP_CONFIG.colors.duplex.active_clap} label="Active CLAP nodes" />
+            <KeyNode color={APP_CONFIG.colors.light.hover} label="Active CLAP nodes" />
           </div>
 
           <div className="mt-3 flex flex-wrap gap-4 text-sm">
@@ -386,7 +386,7 @@ export function ComputedClapExample() {
             <div className="mt-3 text-lg font-semibold text-ink">{frame.title}</div>
             <p className="mt-3 text-sm leading-7 text-ink/74"><FormatMathText text={frame.note} /></p>
             {frame.kind === "update" ? (
-              <div className="mt-4 inline-flex rounded-full bg-layer1/12 px-4 py-2 text-sm font-medium text-layer1">
+              <div className="mt-4 inline-flex rounded-full px-4 py-2 text-sm font-medium">
                 <FormatMathText text="$\Delta$ decreases, so the union contracts by one." />
               </div>
             ) : null}
@@ -435,32 +435,6 @@ export function ComputedClapExample() {
             </div>
           </div>
 
-        </div>
-      </div>
-
-      <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <div />
-        <div
-          className="rounded-[24px] border border-ink/8 bg-surface/90 p-5"
-          data-testid="computed-export"
-        >
-          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/55">
-            Exported walkthrough
-          </div>
-          <div className="mt-4 overflow-hidden rounded-[22px] border border-ink/8 bg-mist/35">
-            <Image
-              src="/media/computed-clap-example.gif"
-              alt="Exported frame-by-frame animation of the computed CLAP-S example"
-              width={720}
-              height={862}
-              className="h-auto w-full"
-              unoptimized
-            />
-          </div>
-          <p className="mt-3 text-sm leading-7 text-ink/72">
-            The GIF is rendered from step-by-step browser screenshots of this same example, so the
-            website contains both the interactive replay and a compact autoplay export.
-          </p>
         </div>
       </div>
     </Card>

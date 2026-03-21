@@ -6,48 +6,23 @@
 
 :root {
   color-scheme: light;
+  /* 
+   * Global design tokens are defined in @/lib/config.ts. 
+   * Values are injected as CSS variables via ThemeProvider.
+   * Following are structural defaults for light mode to avoid hydration flash.
+   */
   --color-ink: 22 33 43;
   --color-mist: 238 243 245;
   --color-paper: 251 249 243;
   --color-surface: 255 255 255;
-  --color-layer1: 249 115 22;
-  --color-layer2: 236 72 153;
-  --color-matched: 31 41 55;
-  --color-driver: 249 115 22;
-  --color-dd1: 96 165 250;
-  --color-dd2: 96 165 250;
-  --color-cds: 248 113 113;
-  --color-cms: 14 165 233;
-  --color-source: 59 130 246;
-  --color-relay: 250 204 21;
-  --color-target: 96 165 250;
-  --body-bg:
-    radial-gradient(circle at top left, rgba(11, 114, 133, 0.16), transparent 26%),
-    radial-gradient(circle at top right, rgba(199, 119, 26, 0.14), transparent 22%),
-    linear-gradient(180deg, #fbf9f3 0%, #eef3f5 100%);
+  --body-bg: linear-gradient(180deg, #fbf9f3 0%, #eef3f5 100%);
+  --mesh-bg: transparent;
+  --card-shadow: none;
 }
 
 .dark {
   color-scheme: dark;
-  --color-ink: 229 236 245;
-  --color-mist: 15 23 42;
-  --color-paper: 2 6 23;
-  --color-surface: 15 23 42;
-  --color-layer1: 251 146 60;
-  --color-layer2: 244 114 182;
-  --color-matched: 203 213 245;
-  --color-driver: 251 146 60;
-  --color-dd1: 147 197 253;
-  --color-dd2: 165 180 252;
-  --color-cds: 252 165 165;
-  --color-cms: 56 189 248;
-  --color-source: 147 197 253;
-  --color-relay: 253 230 138;
-  --color-target: 165 180 252;
-  --body-bg:
-    radial-gradient(circle at top left, rgba(14, 116, 144, 0.34), transparent 32%),
-    radial-gradient(circle at top right, rgba(202, 138, 4, 0.22), transparent 26%),
-    linear-gradient(180deg, #020617 0%, #0f172a 100%);
+  /* Dark mode values are fully injected from JS */
 }
 
 * {

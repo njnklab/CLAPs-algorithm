@@ -31,7 +31,7 @@ export default function ExchangeTheorem() {
         ...styleConfig.nodes,
         all: {
           ...styleConfig.nodes.all,
-          textFontSize: 4
+          textFontSize: APP_CONFIG.visual.network.text_size
         }
       }
     }),
@@ -40,8 +40,8 @@ export default function ExchangeTheorem() {
 
   const matchingEdgeColor = styleConfig.edges.matching.color;
   const nonMatchingEdgeColor = styleConfig.edges.nonMatching.color;
-  const altMatchedEdgeColor = styleConfig.edges.alternativeNonMatching.color;
-  const alternatingEdgeColor = styleConfig.edges.alternativeMatching.color;
+  const altNonMatchedEdgeColor = styleConfig.edges.alternativeNonMatching.color;
+  const altMatchedEdgeColor = styleConfig.edges.alternativeMatching.color;
   const hoverEdgeColor =
     styleConfig.edges.hover.color === "no-change" ? styleConfig.edges.matching.color : styleConfig.edges.hover.color;
   const driverNodeColor = styleConfig.nodes.driver.strokeColor;
@@ -203,18 +203,31 @@ export default function ExchangeTheorem() {
 
   const positions: NetworkNode[] = useMemo(() => {
     const sorted = [...exchangeNodes].sort((a, b) => a.id - b.id);
+    const layout = styleConfig.layout.orientation;
+    const margin = APP_CONFIG.visual.network.layout.margin;
+    const span = APP_CONFIG.visual.network.layout.span;
+    const y_source = APP_CONFIG.visual.network.layout.y_source;
+    const y_target = APP_CONFIG.visual.network.layout.y_target;
+
     return exchangeNodes.map(node => {
       const index = sorted.findIndex(n => n.id === node.id);
-      const bipartiteX = 15 + (index * 70) / (sorted.length - 1);
+      const x = margin + (index * span) / (sorted.length - 1);
+      const isHorizontalFlow = layout === "horizontal";
+
+      // Vertical layout refinements: tighter y-spread (smaller gap), wider x-spread (distance between sets)
+      const verticalY = APP_CONFIG.visual.network.layout.y_margin + (index * APP_CONFIG.visual.network.layout.y_span) / (sorted.length - 1);
+      const verticalXSource = APP_CONFIG.visual.network.layout.x_source;
+      const verticalXTarget = APP_CONFIG.visual.network.layout.x_target;
+      
       return {
         id: node.id,
         origX: node.x,
         origY: node.y,
-        left: { x: bipartiteX, y: 30 },
-        right: { x: bipartiteX, y: 70 }
+        left: isHorizontalFlow ? { x, y: y_source } : { x: verticalXSource, y: verticalY },
+        right: isHorizontalFlow ? { x, y: y_target } : { x: verticalXTarget, y: verticalY }
       };
     });
-  }, []);
+  }, [styleConfig.layout.orientation]);
 
   const [exchangePhase, setExchangePhase] = useState<ExchangePhase | null>(null);
   const prevStepRef = useRef(0);
@@ -295,6 +308,7 @@ export default function ExchangeTheorem() {
                 exchangePresentation={exchangePresentation}
                 forceShowMatching={true}
                 styleConfig={styleConfig}
+                layout={styleConfig.layout.orientation}
                 title={t("network.title.bipartite")}
                 titleFontSize={4.5}
                 stripedNodeIds={stripedNodeIds}
@@ -305,23 +319,23 @@ export default function ExchangeTheorem() {
           <div className="rounded-[26px] border border-ink/8 bg-surface p-1 h-[360px] lg:h-[400px] flex items-center justify-center overflow-hidden">
             <svg viewBox="5 -5 94 85" className="w-full h-full">
               <defs>
-                <marker id="arrowhead" markerWidth="4" markerHeight="3" refX="0.1" refY="1.5" orient="auto">
+                <marker id="arrowhead" markerWidth={APP_CONFIG.visual.network.arrow_size.width} markerHeight={APP_CONFIG.visual.network.arrow_size.height} refX="0.1" refY="1.5" orient="auto">
                   <path d="M 0 0 L 4 1.5 L 0 3 z" fill={nonMatchingEdgeColor} />
                 </marker>
-                <marker id="arrowhead-matched" markerWidth="4" markerHeight="3" refX="0.1" refY="1.5" orient="auto">
+                <marker id="arrowhead-matched" markerWidth={APP_CONFIG.visual.network.arrow_size.width} markerHeight={APP_CONFIG.visual.network.arrow_size.height} refX="0.1" refY="1.5" orient="auto">
                   <path d="M 0 0 L 4 1.5 L 0 3 z" fill={matchingEdgeColor} />
                 </marker>
-                <marker id="arrowhead-alt-matched" markerWidth="4" markerHeight="3" refX="0.1" refY="1.5" orient="auto">
+                <marker id="arrowhead-alt-matched" markerWidth={APP_CONFIG.visual.network.arrow_size.width} markerHeight={APP_CONFIG.visual.network.arrow_size.height} refX="0.1" refY="1.5" orient="auto">
                   <path d="M 0 0 L 4 1.5 L 0 3 z" fill={altMatchedEdgeColor} />
                 </marker>
-                <marker id="arrowhead-regular" markerWidth="4" markerHeight="3" refX="0.1" refY="1.5" orient="auto">
+                <marker id="arrowhead-regular" markerWidth={APP_CONFIG.visual.network.arrow_size.width} markerHeight={APP_CONFIG.visual.network.arrow_size.height} refX="0.1" refY="1.5" orient="auto">
                   <path d="M 0 0 L 4 1.5 L 0 3 z" fill={nonMatchingEdgeColor} />
                 </marker>
-                <marker id="arrowhead-hover" markerWidth="4" markerHeight="3" refX="0.1" refY="1.5" orient="auto">
+                <marker id="arrowhead-hover" markerWidth={APP_CONFIG.visual.network.arrow_size.width} markerHeight={APP_CONFIG.visual.network.arrow_size.height} refX="0.1" refY="1.5" orient="auto">
                   <path d="M 0 0 L 4 1.5 L 0 3 z" fill={hoverEdgeColor} />
                 </marker>
-                <marker id="arrowhead-alternating" markerWidth="4" markerHeight="3" refX="0.1" refY="1.5" orient="auto">
-                  <path d="M 0 0 L 4 1.5 L 0 3 z" fill={alternatingEdgeColor} />
+                <marker id="arrowhead-alternating" markerWidth={APP_CONFIG.visual.network.arrow_size.width} markerHeight={APP_CONFIG.visual.network.arrow_size.height} refX="0.1" refY="1.5" orient="auto">
+                  <path d="M 0 0 L 4 1.5 L 0 3 z" fill={altNonMatchedEdgeColor} />
                 </marker>
               </defs>
               <DirectedNetwork
@@ -464,7 +478,7 @@ export default function ExchangeTheorem() {
                 <div className="flex flex-wrap mb-4 gap-x-8 gap-y-4">
                   <KeyEdge color={matchingEdgeColor} label={t("exchange.legend.matched")} />
                   <KeyEdge color={nonMatchingEdgeColor} label={t("exchange.legend.unmatched")} />
-                  <KeyEdge color={altMatchedEdgeColor} label={t("exchange.legend.alternating")} />
+                  <KeyEdge color={altNonMatchedEdgeColor} label={t("exchange.legend.alternating")} />
                 </div>
                 <div className="flex flex-wrap gap-x-8 gap-y-4">
                   <KeyNode color={driverNodeColor} label={t("exchange.legend.driver")} />

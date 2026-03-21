@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 
 import { DEFAULT_STYLE_CONFIG, type NetworkStyleConfig } from "@/features/animations/network/types";
 import { deepMerge, setByPath, type DeepPartial } from "@/lib/object";
+import { APP_CONFIG } from "@/lib/config";
 import { useThemeMode } from "./theme-provider";
 
 type VisualizationSettingsContextType = {
@@ -18,46 +19,46 @@ const VisualizationSettingsContext = createContext<VisualizationSettingsContextT
 const DARK_STYLE_OVERRIDES: DeepPartial<NetworkStyleConfig> = {
   nodes: {
     matching: {
-      strokeColor: "#7dd3fc",
-      textColor: "#bae6fd",
-      fillColor: "#082f49",
+      strokeColor: APP_CONFIG.colors.dark.matched,
+      textColor: APP_CONFIG.colors.dark.matched,
+      fillColor: APP_CONFIG.colors.dark.surface,
       fillColorOpacity: 0.3
     },
     driver: {
-      strokeColor: "#fb7185",
-      textColor: "#feb4b4ff",
-      fillColor: "#422006",
+      strokeColor: APP_CONFIG.colors.dark.driver,
+      textColor: APP_CONFIG.colors.dark.driver,
+      fillColor: APP_CONFIG.colors.dark.mist,
       fillColorOpacity: 0.35
     },
     regular: {
-      strokeColor: "#cbd5f5",
-      textColor: "#e2e8f0",
-      fillColor: "#020617",
+      strokeColor: APP_CONFIG.colors.dark.non_matching_edge,
+      textColor: APP_CONFIG.colors.dark.ink,
+      fillColor: APP_CONFIG.colors.dark.paper,
       fillColorOpacity: 1
     },
     hover: {
-      strokeColor: "#fde68a",
-      textColor: "#fde68a"
+      strokeColor: APP_CONFIG.colors.dark.hover,
+      textColor: APP_CONFIG.colors.dark.hover
     }
   },
   edges: {
     matching: {
-      color: "#fb7185"
+      color: APP_CONFIG.colors.dark.matching_edge
     },
     nonMatching: {
-      color: "#94a3b8"
+      color: APP_CONFIG.colors.dark.non_matching_edge
     },
     alternativeNonMatching: {
-      color: "#7dd3fc"
+      color: APP_CONFIG.colors.dark.alternating_edge
     },
     alternativeMatching: {
-      color: "#fb7185"
+      color: APP_CONFIG.colors.dark.matching_edge
     },
     virtual: {
-      color: "rgba(255,255,255,0.12)"
+      color: APP_CONFIG.colors.dark.virtual
     },
     hover: {
-      color: "#fde68a"
+      color: APP_CONFIG.colors.dark.hover
     }
   }
 };

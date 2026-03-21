@@ -67,8 +67,8 @@ export const heroOptions: HeroOption[] = [
       "A duplex network can keep both minimal driver budgets fixed and still become cheaper to actuate through cross-layer reconfiguration.",
     value:
       String.raw`Each successful CLAP update removes two cross-layer conflicts and contracts the union driver set by exactly one node.`,
-    primaryCta: "View the demo",
-    secondaryCta: "Download PDF"
+    primaryCta: "Download PDF",
+    secondaryCta: "View the demo"
   }
 ];
 

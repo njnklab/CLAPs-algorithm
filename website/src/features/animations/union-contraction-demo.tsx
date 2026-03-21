@@ -24,10 +24,10 @@ export function UnionContractionDemo() {
     return universe.map((node) => {
       const inL1 = state.d1.includes(node);
       const inL2 = state.d2.includes(node);
-      if (inL1 && inL2) return { node, label: "$CDS$", color: APP_CONFIG.colors.duplex.cds };
-      if (inL1) return { node, label: "$DD_1$", color: APP_CONFIG.colors.duplex.dd1 };
-      if (inL2) return { node, label: "$DD_2$", color: APP_CONFIG.colors.duplex.dd2 };
-      return { node, label: "$CMS$", color: APP_CONFIG.colors.duplex.cms };
+      if (inL1 && inL2) return { node, label: "$CDS$", color: APP_CONFIG.colors.light.cds };
+      if (inL1) return { node, label: "$DD_1$", color: APP_CONFIG.colors.light.layer1 };
+      if (inL2) return { node, label: "$DD_2$", color: APP_CONFIG.colors.light.layer2 };
+      return { node, label: "$CMS$", color: APP_CONFIG.colors.light.cms };
     });
   }, [state]);
 
@@ -45,10 +45,10 @@ export function UnionContractionDemo() {
   }, [partition]);
 
   const labelColors: Record<string, string> = {
-    "$DD_1$": APP_CONFIG.colors.duplex.dd1,
-    "$DD_2$": APP_CONFIG.colors.duplex.dd2,
-    "$CDS$": APP_CONFIG.colors.duplex.cds,
-    "$CMS$": APP_CONFIG.colors.duplex.cms
+    "$DD_1$": APP_CONFIG.colors.light.layer1,
+    "$DD_2$": APP_CONFIG.colors.light.layer2,
+    "$CDS$": APP_CONFIG.colors.light.cds,
+    "$CMS$": APP_CONFIG.colors.light.cms
   };
 
   const renderSet = (label: string, nodes: number[]) => {
@@ -90,10 +90,10 @@ export function UnionContractionDemo() {
             body={t("union.animation.body")}
           />
           <div className="grid gap-3 sm:grid-cols-2">
-            <StatCard label="$|D_1|$" value={state.d1.length} color={APP_CONFIG.colors.layer1.driver} hint={t("union.stats.d1Hint")} />
-            <StatCard label="$|D_2|$" value={state.d2.length} color={APP_CONFIG.colors.layer2.driver} hint={t("union.stats.d2Hint")} />
-            <StatCard label="$|U|$" value={unionSize} color={APP_CONFIG.colors.default.gray} hint={t("union.stats.unionHint")} />
-            <StatCard label="$\\Delta$" value={delta} color={APP_CONFIG.colors.default.gray} hint={t("union.stats.deltaHint")} />
+            <StatCard label="$|D_1|$" value={state.d1.length} color={APP_CONFIG.colors.light.layer1} hint={t("union.stats.d1Hint")} />
+            <StatCard label="$|D_2|$" value={state.d2.length} color={APP_CONFIG.colors.light.layer2} hint={t("union.stats.d2Hint")} />
+            <StatCard label="$|U|$" value={unionSize} color={APP_CONFIG.colors.light.non_matching_edge} hint={t("union.stats.unionHint")} />
+            <StatCard label="$\Delta$" value={delta} color={APP_CONFIG.colors.light.non_matching_edge} hint={t("union.stats.deltaHint")} />
           </div>
           <div className="text-sm leading-7 text-ink/72">
             <FormatMathText text={t(state.explanationKey)} />
@@ -106,14 +106,14 @@ export function UnionContractionDemo() {
           </div>
           <div className="space-y-4">
             <div>
-              <div className="mb-2 text-sm font-medium" style={{ color: APP_CONFIG.colors.layer1.driver }}>{t("union.membership.layer1")}</div>
+              <div className="mb-2 text-sm font-medium" style={{ color: APP_CONFIG.colors.light.layer1 }}>{t("union.membership.layer1")}</div>
               <div className="flex flex-wrap gap-3">
                 {universe.map((node) => (
                   <div
                     key={`l1-${node}`}
                     className={`flex h-12 w-12 items-center justify-center rounded-2xl border text-sm font-semibold transition-colors`}
                     style={state.d1.includes(node)
-                      ? { borderColor: `${APP_CONFIG.colors.layer1.driver}33`, backgroundColor: `${APP_CONFIG.colors.layer1.driver}1a`, color: APP_CONFIG.colors.layer1.driver }
+                      ? { borderColor: `${APP_CONFIG.colors.light.layer1}33`, backgroundColor: `${APP_CONFIG.colors.light.layer1}1a`, color: APP_CONFIG.colors.light.layer1 }
                       : {
                         borderColor: "rgba(var(--color-ink), 0.1)",
                         backgroundColor: "rgba(var(--color-surface), 1)",
@@ -126,14 +126,14 @@ export function UnionContractionDemo() {
               </div>
             </div>
             <div>
-              <div className="mb-2 text-sm font-medium" style={{ color: APP_CONFIG.colors.layer2.driver }}>{t("union.membership.layer2")}</div>
+              <div className="mb-2 text-sm font-medium" style={{ color: APP_CONFIG.colors.light.layer2 }}>{t("union.membership.layer2")}</div>
               <div className="flex flex-wrap gap-3">
                 {universe.map((node) => (
                   <div
                     key={`l2-${node}`}
                     className={`flex h-12 w-12 items-center justify-center rounded-2xl border text-sm font-semibold transition-colors`}
                     style={state.d2.includes(node)
-                      ? { borderColor: `${APP_CONFIG.colors.layer2.driver}33`, backgroundColor: `${APP_CONFIG.colors.layer2.driver}1a`, color: APP_CONFIG.colors.layer2.driver }
+                      ? { borderColor: `${APP_CONFIG.colors.light.layer2}33`, backgroundColor: `${APP_CONFIG.colors.light.layer2}1a`, color: APP_CONFIG.colors.light.layer2 }
                       : {
                         borderColor: "rgba(var(--color-ink), 0.1)",
                         backgroundColor: "rgba(var(--color-surface), 1)",

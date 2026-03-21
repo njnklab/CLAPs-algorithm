@@ -17,9 +17,9 @@ export function StructuralPrimer() {
   const [stage, setStage] = useState(0);
   const [matchingCase, setMatchingCase] = useState<keyof typeof primerMatchingOptions>("A");
   const [hoveredNode, setHoveredNode] = useState<{ id: number; side: "source" | "target" | "both" } | null>(null);
-  const [layout, setLayout] = useState<"vertical" | "horizontal">("horizontal");
   const [playing, setPlaying] = useState(false);
   const { styleConfig } = useVisualizationSettings();
+  const layout = styleConfig.layout.orientation;
   const { t } = useI18n();
   const stages = useMemo(
     () => [
@@ -49,8 +49,8 @@ export function StructuralPrimer() {
 
   const matchingEdgeColor = styleConfig.edges.matching.color;
   const nonMatchingEdgeColor = styleConfig.edges.nonMatching.color;
-  const altMatchedEdgeColor = styleConfig.edges.alternativeNonMatching.color;
-  const alternatingEdgeColor = styleConfig.edges.alternativeMatching.color;
+  const altMatchedEdgeColor = styleConfig.edges.alternativeMatching.color;
+  const alternatingEdgeColor = styleConfig.edges.alternativeNonMatching.color;
   const hoverEdgeColor =
     styleConfig.edges.hover.color === "no-change" ? styleConfig.edges.matching.color : styleConfig.edges.hover.color;
   const driverNodeColor = styleConfig.nodes.driver.strokeColor;
@@ -89,39 +89,35 @@ export function StructuralPrimer() {
 
   const bipartitePositions = useMemo(() => {
     const sortedNodes = [...primerNetworkNodes].sort((a, b) => a.id - b.id);
-
-    // Circular layout for Directed Network stage
-    const centerX = 50;
-    const centerY = 50;
-    const radius = 35;
+    const centerX = APP_CONFIG.visual.network.layout.center;
+    const centerY = APP_CONFIG.visual.network.layout.center;
+    const radius = APP_CONFIG.visual.network.layout.radius;
+    const margin = APP_CONFIG.visual.network.layout.margin;
+    const span = APP_CONFIG.visual.network.layout.span;
+    const ySource = APP_CONFIG.visual.network.layout.y_source;
+    const yTarget = APP_CONFIG.visual.network.layout.y_target;
 
     return sortedNodes.map((node, index) => {
-      // Distribute nodes evenly on a circle
       const angle = (index * 2 * Math.PI) / sortedNodes.length - Math.PI / 2;
       const origX = centerX + radius * Math.cos(angle);
       const origY = centerY + radius * Math.sin(angle);
 
-      if (layout === "horizontal") {
-        // Horizontal layout: Source top row, Target bottom row
-        const x = 16 + (index * 70) / (sortedNodes.length - 1);
-        return {
-          id: node.id,
-          origX,
-          origY,
-          left: { x, y: 30 },
-          right: { x, y: 70 }
-        };
-      } else {
-        // Vertical layout: Source left column, Target right column
-        const y = 16 + (index * 70) / (sortedNodes.length - 1);
-        return {
-          id: node.id,
-          origX,
-          origY,
-          left: { x: 20, y },
-          right: { x: 80, y }
-        };
-      }
+      const x = margin + (index * span) / (sortedNodes.length - 1);
+
+      const isHorizontalFlow = layout === "horizontal";
+
+      // Vertical layout tweaks: smaller node spacing (vertical spread), larger source/target distance (horizontal spread)
+      const verticalY = APP_CONFIG.visual.network.layout.y_margin + (index * APP_CONFIG.visual.network.layout.y_span) / (sortedNodes.length - 1);
+      const verticalXSource = APP_CONFIG.visual.network.layout.x_source;
+      const verticalXTarget = APP_CONFIG.visual.network.layout.x_target;
+
+      return {
+        id: node.id,
+        origX,
+        origY,
+        left: isHorizontalFlow ? { x, y: ySource } : { x: verticalXSource, y: verticalY },
+        right: isHorizontalFlow ? { x, y: yTarget } : { x: verticalXTarget, y: verticalY }
+      };
     });
   }, [layout]);
 
@@ -156,17 +152,17 @@ export function StructuralPrimer() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-start">
+        <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr] items-start">
           <div className="rounded-[26px] border border-ink/8 bg-surface p-4 relative">
             <svg viewBox="0 0 100 100" className="w-full">
               <defs>
-                <marker id="arrowhead" markerWidth="4" markerHeight="3" refX="0.1" refY="1.5" orient="auto">
+                <marker id="arrowhead" markerWidth={APP_CONFIG.visual.network.arrow_size.width} markerHeight={APP_CONFIG.visual.network.arrow_size.height} refX="0.1" refY="1.5" orient="auto">
                   <path d="M 0 0 L 4 1.5 L 0 3 z" fill={nonMatchingEdgeColor} />
                 </marker>
                 <marker
                   id="arrowhead-matched"
-                  markerWidth="4"
-                  markerHeight="3"
+                  markerWidth={APP_CONFIG.visual.network.arrow_size.width}
+                  markerHeight={APP_CONFIG.visual.network.arrow_size.height}
                   refX="0.1"
                   refY="1.5"
                   orient="auto"
@@ -234,10 +230,10 @@ export function StructuralPrimer() {
                   const nodeRadius = styleConfig.nodes.all.radius;
                   const edgeStrokeWidth = styleConfig.edges.all.strokeWidth;
 
-                  const startPadding = nodeRadius + 1.2;
+                  const startPadding = nodeRadius + APP_CONFIG.visual.network.edge_padding;
                   const endPadding = isDirectedView
-                    ? nodeRadius + 4.5
-                    : nodeRadius + 1.2;
+                    ? nodeRadius + APP_CONFIG.visual.network.edge_padding_directed
+                    : nodeRadius + APP_CONFIG.visual.network.edge_padding;
 
                   const targetX1 = x1 + startPadding * Math.cos(angle);
                   const targetY1 = y1 + startPadding * Math.sin(angle);
@@ -256,15 +252,19 @@ export function StructuralPrimer() {
                   let strokeColor = nonMatchingEdgeColor;
                   let visualStrokeWidth = edgeStrokeWidth;
                   let markerEnd = isDirectedView ? "url(#arrowhead)" : "none";
-                  let opacity = 1;
+                  let opacity = styleConfig.edges.nonMatching.colorOpacity;
 
                   if (isHovered) {
                     strokeColor = hoverEdgeColor;
-                    visualStrokeWidth = edgeStrokeWidth * 1.5;
+                    visualStrokeWidth = edgeStrokeWidth * APP_CONFIG.visual.network.hover_multiplier;
+                    opacity = styleConfig.edges.hover.colorOpacity === "no-change"
+                      ? styleConfig.edges.matching.colorOpacity
+                      : styleConfig.edges.hover.colorOpacity;
                     if (isDirectedView) markerEnd = "url(#arrowhead-hover)";
                   } else if (isMatched) {
                     strokeColor = matchingEdgeColor;
-                    visualStrokeWidth = edgeStrokeWidth * 1.2;
+                    visualStrokeWidth = edgeStrokeWidth * APP_CONFIG.visual.network.match_multiplier;
+                    opacity = styleConfig.edges.matching.colorOpacity;
                     if (isDirectedView) markerEnd = "url(#arrowhead-matched)";
                   } else if (stage === 4) {
                     if (isDirectedView) markerEnd = "url(#arrowhead-regular)";
@@ -351,64 +351,64 @@ export function StructuralPrimer() {
                     <FormatMathText text={t("primer.note")} />
                   </p>
 
-                <div className="mt-3 flex items-center gap-2">
-                  <span className="text-[12px] font-semibold text-ink/60 uppercase tracking-wider">
-                    {t("primer.altMatching")}
-                  </span>
-                  <div className="flex bg-mist/40 p-1 rounded-lg border border-ink/5">
-                    {(["A", "B"] as const).map((opt) => (
-                      <button
-                        key={opt}
-                        onClick={() => setMatchingCase(opt)}
-                        className={cn(
-                          "px-3 py-1 text-[12px] rounded-md transition-all font-medium",
-                          matchingCase === opt
-                            ? "bg-surface text-ink shadow-sm"
-                            : "text-ink/60 hover:text-ink hover:bg-surface/30"
-                        )}
-                      >
-                        {primerMatchingOptions[opt].label}
-                      </button>
-                    ))}
+                  <div className="mt-3 flex items-center gap-2">
+                    <span className="text-[12px] font-semibold text-ink/60 uppercase tracking-wider">
+                      {t("primer.altMatching")}
+                    </span>
+                    <div className="flex bg-mist/40 p-1 rounded-lg border border-ink/5">
+                      {(["A", "B"] as const).map((opt) => (
+                        <button
+                          key={opt}
+                          onClick={() => setMatchingCase(opt)}
+                          className={cn(
+                            "px-3 py-1 text-[12px] rounded-md transition-all font-medium",
+                            matchingCase === opt
+                              ? "bg-surface text-ink shadow-sm"
+                              : "text-ink/60 hover:text-ink hover:bg-surface/30"
+                          )}
+                        >
+                          {primerMatchingOptions[opt].label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <p className="mt-2">
+                <FormatMathText text={t("primer.driverNote")} />
+              </p>
+
+              <p className="mt-2 mb-4 pb-4 border-b border-ink/5 text-[12px] text-ink/65 italic leading-relaxed">
+                <strong className="mr-1">{t("primer.constraints.title")}</strong>
+                <FormatMathText text={t("primer.constraints.body")} />
+              </p>
+
+              {hoveredNode ? (
+                <div>
+                  <p className="font-semibold text-ink">
+                    {t("primer.focusLabel", {
+                      id: hoveredNode.id,
+                      suffix: hoveredNode.side === "source" ? "+" : hoveredNode.side === "target" ? "-" : ""
+                    })}
+                  </p>
+                  <div className="mt-2 text-[13px] text-ink/80 flex flex-wrap gap-2">
+                    <span>{t("primer.neighbors.label")}</span>
+                    {neighbors.length > 0 ? (
+                      neighbors.map((n, i) => (
+                        <span key={i} className="px-1.5 bg-surface/50 rounded border border-ink/5 text-ink text-[12px]">
+                          {n}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="italic">{t("primer.neighbors.none")}</span>
+                    )}
                   </div>
                 </div>
-              </>
-            )}
-
-            <p className="mt-2">
-              <FormatMathText text={t("primer.driverNote")} />
-            </p>
-
-            <p className="mt-2 mb-4 pb-4 border-b border-ink/5 text-[12px] text-ink/65 italic leading-relaxed">
-              <strong className="mr-1">{t("primer.constraints.title")}</strong>
-              <FormatMathText text={t("primer.constraints.body")} />
-            </p>
-
-            {hoveredNode ? (
-              <div>
-                <p className="font-semibold text-ink">
-                  {t("primer.focusLabel", {
-                    id: hoveredNode.id,
-                    suffix: hoveredNode.side === "source" ? "+" : hoveredNode.side === "target" ? "-" : ""
-                  })}
-                </p>
-                <div className="mt-2 text-[13px] text-ink/80 flex flex-wrap gap-2">
-                  <span>{t("primer.neighbors.label")}</span>
-                  {neighbors.length > 0 ? (
-                    neighbors.map((n, i) => (
-                      <span key={i} className="px-1.5 bg-surface/50 rounded border border-ink/5 text-ink text-[12px]">
-                        {n}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="italic">{t("primer.neighbors.none")}</span>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <p>{t("primer.hoverHint")}</p>
-            )}
-          </div>
+              ) : (
+                <p>{t("primer.hoverHint")}</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -7,10 +7,11 @@ import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/providers/i18n-provider";
 
-export function SafeInlineMath({ math }: { math: string }) {
+export function SafeInlineMath({ math, as = "span" }: { math: string; as?: any }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  if (!mounted) return <span suppressHydrationWarning className="opacity-0">{`$${math}$`}</span>;
+  const Component = as;
+  if (!mounted) return <Component suppressHydrationWarning className="opacity-0">{`$${math}$`}</Component>;
   return <InlineMath math={math} />;
 }
 
@@ -48,7 +49,7 @@ export function FormatMathText<T extends keyof React.JSX.IntrinsicElements = "sp
       {parts.map((part, index) => {
         if (!part) return null;
         if (part.startsWith("$") && part.endsWith("$")) {
-          return <SafeInlineMath key={index} math={part.slice(1, -1)} />;
+          return <SafeInlineMath key={index} math={part.slice(1, -1)} as={InlineWrapper} />;
         }
         const Wrapper = InlineWrapper as any;
         return <Wrapper key={index}>{part}</Wrapper>;
@@ -93,25 +94,23 @@ export function StatCard({
   color?: string;
   hint?: string;
 }) {
-  const toneClass =
+  const toneStyle =
     tone === "layer1"
-      ? "from-layer1/15 to-layer1/5"
+      ? { background: "linear-gradient(to bottom right, rgba(var(--color-layer1), 0.15), rgba(var(--color-layer1), 0.05))" }
       : tone === "layer2"
-        ? "from-layer2/15 to-layer2/5"
-        : "from-ink/10 to-surface/95";
+        ? { background: "linear-gradient(to bottom right, rgba(var(--color-layer2), 0.15), rgba(var(--color-layer2), 0.05))" }
+        : { background: "linear-gradient(to bottom right, rgba(var(--color-ink), 0.1), rgba(var(--color-surface), 0.95))" };
 
   const customStyle = color
     ? {
       background: `linear-gradient(to bottom right, ${color}1a, rgba(var(--color-surface), 0.95))`
     }
-    : {};
+    : toneStyle;
 
   return (
     <div
       className={cn(
-        "rounded-3xl border border-ink/8 p-4 dark:border-white/10 dark:bg-slate-900/60",
-        !color && "bg-gradient-to-br",
-        !color && toneClass
+        "rounded-3xl border border-ink/8 p-4 dark:border-white/10 dark:bg-slate-900/60"
       )}
       style={customStyle}
     >

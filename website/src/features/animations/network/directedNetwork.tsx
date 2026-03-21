@@ -13,7 +13,8 @@ function edgeEq(a: EdgeTuple, b: EdgeTuple) {
 function getDirectedEdgeGeometry(
   edge: EdgeTuple,
   nodes: NetworkProps["nodes"],
-  nodeRadius: number
+  nodeRadius: number,
+  allEdges?: readonly EdgeTuple[]
 ): LineGeometry | null {
   const [from, to] = edge;
   const nodeFrom = nodes.find((n) => n.id === from);
@@ -29,11 +30,16 @@ function getDirectedEdgeGeometry(
   const startPadding = nodeRadius + 1.2;
   const endPadding = nodeRadius + 4.5;
 
+  const hasReverse = allEdges?.some((e) => e[0] === edge[1] && e[1] === edge[0]);
+  const offset = hasReverse ? 1.6 : 0;
+  const normalX = Math.cos(angle + Math.PI / 2) * offset;
+  const normalY = Math.sin(angle + Math.PI / 2) * offset;
+
   return {
-    x1: fromX + startPadding * Math.cos(angle),
-    y1: fromY + startPadding * Math.sin(angle),
-    x2: toX - endPadding * Math.cos(angle),
-    y2: toY - endPadding * Math.sin(angle),
+    x1: fromX + startPadding * Math.cos(angle) + normalX,
+    y1: fromY + startPadding * Math.sin(angle) + normalY,
+    x2: toX - endPadding * Math.cos(angle) + normalX,
+    y2: toY - endPadding * Math.sin(angle) + normalY,
   };
 }
 
@@ -164,7 +170,7 @@ export function DirectedNetwork({
       if (styleConfig.nodes.hover.scale !== "no-change") currentRadius *= styleConfig.nodes.hover.scale;
     }
 
-    const stripePatternId = stripedNodeSet.has(node.id) ? `stripe-node-directed-${node.id}` : null;
+    const stripePatternId = stripedNodeSet.has(node.id) ? `stripe-node-${title?.replace(/\s+/g, '-')}-${node.id}` : null;
     if (stripePatternId) {
       registerStripePattern(stripePatternId, strokeColor, 0.45);
     }
@@ -255,19 +261,10 @@ export function DirectedNetwork({
         const nodeTo = nodes.find((n) => n.id === to);
         if (!nodeFrom || !nodeTo) return null;
 
-        const fromX = nodeFrom.origX;
-        const fromY = nodeFrom.origY;
-        const toX = nodeTo.origX;
-        const toY = nodeTo.origY;
+        const geometry = getDirectedEdgeGeometry([from, to], nodes, nodeRadius, edgesToRender);
+        if (!geometry) return null;
 
-        const angle = Math.atan2(toY - fromY, toX - fromX);
-        const startPadding = nodeRadius + 1.2;
-        const endPadding = nodeRadius + 4.5;
-
-        const targetX1 = fromX + startPadding * Math.cos(angle);
-        const targetY1 = fromY + startPadding * Math.sin(angle);
-        const targetX2 = toX - endPadding * Math.cos(angle);
-        const targetY2 = toY - endPadding * Math.sin(angle);
+        const { x1: targetX1, y1: targetY1, x2: targetX2, y2: targetY2 } = geometry;
 
         const edgeKey = `${from}-${to}`;
 
@@ -305,13 +302,13 @@ export function DirectedNetwork({
 
         // Base styles
         if (pathKind === "matched") {
-          const style = styleConfig.edges.alternativeNonMatching;
+          const style = styleConfig.edges.alternativeMatching;
           strokeColor = style.color;
           strokeDasharray = style.dashed ? style.dashArray : "none";
           opacity = style.colorOpacity;
           markerEnd = "url(#arrowhead-alt-matched)";
         } else if (pathKind === "alternating") {
-          const style = styleConfig.edges.alternativeMatching;
+          const style = styleConfig.edges.alternativeNonMatching;
           strokeColor = style.color;
           strokeDasharray = style.dashed ? style.dashArray : "none";
           opacity = style.colorOpacity;
@@ -366,7 +363,7 @@ export function DirectedNetwork({
       {exchangePresentation?.active && exchangePresentation.phase === "animating" && (
         <ExchangeOverlay
           tokens={exchangeTokens}
-          getGeometry={(edge) => getDirectedEdgeGeometry(edge, nodes, nodeRadius)}
+          getGeometry={(edge) => getDirectedEdgeGeometry(edge, nodes, nodeRadius, edgesToRender)}
           edgeStrokeWidth={edgeStrokeWidth}
           directed
           styleConfig={styleConfig}
